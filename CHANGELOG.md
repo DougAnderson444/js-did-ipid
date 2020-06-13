@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 Bumped resolve() to ipfs.name.resolve() compatible with [async iterators style](https://github.com/ipfs/js-ipfs/blob/master/docs/core-api/NAME.md#returns-4)
 
+git commit --no-verify -m 'message'
+
 ### [0.4.1](https://github.com/ipfs-shipyard/js-did-ipid/compare/v0.4.0...v0.4.1) (2019-06-17)
 
 
