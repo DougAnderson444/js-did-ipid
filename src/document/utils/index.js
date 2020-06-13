@@ -6,7 +6,7 @@ const DEFAULT_CONTEXT = 'https://w3id.org/did/v1';
 
 export const SEPARATORS = {
     PUBLIC_KEY: '#',
-    SERVICE: ';',
+    SERVICE: '#',
 };
 
 export const createId = (did, fragment, separator, options) => {
