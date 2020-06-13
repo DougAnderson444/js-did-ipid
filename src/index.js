@@ -15,8 +15,11 @@ class Ipid {
         const { identifier } = parseDid(did);
 
         try {
-            const { path } = await this.#ipfs.name.resolve(identifier);
-            const cidStr = path.replace(/^\/ipfs\//, '');
+            let cidStr;
+
+            for await (const path of this.#ipfs.name.resolve(identifier)) {
+                cidStr = path.replace(/^\/ipfs\//, '');
+            }            
             const { value: content } = await this.#ipfs.dag.get(cidStr);
 
             assertDocument(content);
