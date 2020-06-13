@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2-doug](https://github.com/ipfs-shipyard/js-did-ipid/compare/v0.4.0...v0.4.1) (2020-06-13)
+
+Bumped resolve() to ipfs.name.resolve() compatible with [async iterators style](https://github.com/ipfs/js-ipfs/blob/master/docs/core-api/NAME.md#returns-4)
+
 ### [0.4.1](https://github.com/ipfs-shipyard/js-did-ipid/compare/v0.4.0...v0.4.1) (2019-06-17)
 
 

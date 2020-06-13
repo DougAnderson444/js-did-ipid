@@ -1,6 +1,6 @@
 {
   "name": "did-ipid",
-  "version": "0.4.1",
+  "version": "0.4.2-doug",
   "description": "The IPID DID method implementation in JavaScript",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -27,8 +27,8 @@
     "es"
   ],
   "scripts": {
-    "build:commonjs": "BABEL_ENV=commonjs babel src -d lib --ignore \"**/__tests__\" --delete-dir-on-start",
-    "build:es": "BABEL_ENV=es babel src -d es --ignore \"**/__tests__\" --delete-dir-on-start",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src -d lib --ignore \"**/__tests__\" --delete-dir-on-start",
+    "build:es": "cross-env BABEL_ENV=es babel src -d es --ignore \"**/__tests__\" --delete-dir-on-start",
     "build": "npm run build:commonjs && npm run build:es",
     "test": "jest --coverage",
     "lint": "eslint . --ignore-path .gitignore .",
@@ -61,7 +61,7 @@
     "testRegex": "/__tests__/.*\\.test\\.js$"
   },
   "peerDependencies": {
-    "ipfs": "^0.35.0 || ^0.36.0"
+    "ipfs": "^0.46.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -71,6 +71,7 @@
     "babel-jest": "^24.1.0",
     "babel-preset-moxy": "^3.0.4",
     "commitlint": "^7.5.2",
+    "cross-env": "^7.0.2",
     "eslint": "^5.13.0",
     "eslint-config-moxy": "^7.0.1",
     "husky": "^2.1.0",
