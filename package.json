@@ -1,6 +1,6 @@
 {
   "name": "did-ipid",
-  "version": "0.4.3-doug",
+  "version": "0.4.4-doug",
   "description": "The IPID DID method implementation in JavaScript",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -80,9 +80,16 @@
     "standard-version": "^6.0.1"
   },
   "dependencies": {
+    "base64url": "^3.0.1",
     "buffer": "^5.2.1",
+    "ipfs": "^0.48.1",
+    "ipfs-http-client": "^45.0.0",
+    "ipfsd-ctl": "^5.0.0",
+    "ipns": "^0.7.3",
+    "it-last": "^1.0.2",
     "libp2p-crypto": "^0.16.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
+    "p-retry": "^4.2.0",
     "peer-id": "^0.12.2",
     "pify": "^4.0.1"
   }

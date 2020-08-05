@@ -1,31 +1,36 @@
 import createDocument, { assertDocument } from './document';
 import { generateRandomString, generateDid, parseDid, pemToBuffer } from './utils';
 import { UnavailableIpfs, InvalidDid, IllegalCreate } from './utils/errors';
+import last from 'it-last';
+import goPush from './utils/ipnsUtils';
 
 class Ipid {
     #ipfs;
     #lifetime;
+    #apiMultiAddr;
+    #wsMultiAddr;
 
-    constructor(ipfs, lifetime) {
+    constructor(ipfs, lifetime, apiMultiAddr, wsMultiAddr) {
         this.#ipfs = ipfs;
         this.#lifetime = lifetime || '87600h';
+        this.#apiMultiAddr = apiMultiAddr;
+        this.#wsMultiAddr = wsMultiAddr;
     }
 
     async resolve(did) {
         const { identifier } = parseDid(did);
 
         try {
-            let cidStr;
+            const path = await last(this.#ipfs.name.resolve(identifier));
+            const cidStr = path.replace(/^\/ipfs\//, '');
 
-            for await (const path of this.#ipfs.name.resolve(identifier)) {
-                cidStr = path.replace(/^\/ipfs\//, '');
-            }            
             const { value: content } = await this.#ipfs.dag.get(cidStr);
 
             assertDocument(content);
 
             return content;
         } catch (err) {
+            console.log('resolve err:', err);
             if (err.code === 'INVALID_DOCUMENT') {
                 throw err;
             }
@@ -37,17 +42,11 @@ class Ipid {
     async create(pem, operations) {
         const did = await getDid(pem);
 
-        try {
-            await this.resolve(did);
-        } catch (err) {
-            const document = createDocument(did);
+        const document = createDocument(did);
 
-            operations(document);
+        operations(document);
 
-            return this.#publish(pem, document.getContent());
-        }
-
-        throw new IllegalCreate();
+        return this.#publish(pem, document.getContent());
     }
 
     async update(pem, operations) {
@@ -63,20 +62,31 @@ class Ipid {
 
     #publish = async (pem, content) => {
         const keyName = this.#generateKeyName();
+        const start = Date.now();
 
         await this.#importKey(keyName, pem);
 
         try {
-            const cid = await this.#ipfs.dag.put(content);
+            const cid = await this.#ipfs.dag.put(content, { pin: true });
             const path = `/ipfs/${cid.toBaseEncodedString()}`;
 
-            await this.#ipfs.name.publish(path, {
-                lifetime: this.#lifetime,
-                ttl: this.#lifetime,
+            console.log('publishing ', content, 'to ', path, '\n', new Date(start).toLocaleTimeString());
+
+            const resLocal = this.#ipfs.name.publish(path, {
+                resolve: false,
                 key: keyName,
             });
 
+            const resRemote = goPush(pem, this.#apiMultiAddr, this.#wsMultiAddr, cid); // Push it to the goIpfs node network
+
+            await resLocal;
+            console.log('published ', content, 'to ', path, 'ended: ', Date.now() - start);
+            await resRemote;
+            console.log(`published to go ${Date.now() - start}ms`);
+
             return content;
+        } catch (err) {
+            console.log(err);
         } finally {
             await this.#removeKey(keyName);
         }
@@ -109,12 +119,12 @@ export const getDid = async (pem) => {
     return generateDid(key);
 };
 
-const createIpid = (ipfs, { lifetime } = {}) => {
+const createDidIpid = (ipfs, { lifetime } = {}, apiMultiAddr, wsMultiAddr) => {
     if (typeof ipfs.isOnline === 'function' && !ipfs.isOnline()) {
         throw new UnavailableIpfs();
     }
 
-    return new Ipid(ipfs, lifetime);
+    return new Ipid(ipfs, lifetime, apiMultiAddr, wsMultiAddr);
 };
 
-export default createIpid;
+export default createDidIpid;
