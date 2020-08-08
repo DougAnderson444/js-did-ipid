@@ -17,10 +17,8 @@ let ipfsAPI; // Remote server IPFS node
 let ipfsBrowser;
 
 async function createIpfsBrowser(pem) {
-  console.log(`createIpfsBrowser`);
 
   if (!ipfsBrowser) {
-    console.log(`!IpfsBrowser`);
     const privKeyRaw = await IPFS.crypto.keys.import(pem); // Convert to JWK raw format
     const b64pk = Buffer.from(privKeyRaw.bytes).toString("base64"); // Raw to base64
 
@@ -37,10 +35,8 @@ async function createIpfsBrowser(pem) {
     // Using base64 privKey
     options.init = new Object();
     options.init.privateKey = b64pk;
-    console.log(`options`, options);
     ipfsBrowser = await IPFS.create(options);
     const { id } = await ipfsBrowser.id();
-    console.log(`ipfsBrowser`, id);
 
     /*
     ipfsBrowser = await Ctl.createController({
@@ -62,8 +58,8 @@ async function createIpfsBrowser(pem) {
 
 // Connect to a Go-IPFS-Node remotely through its API
 async function nodeConnect(apiMultiAddr) {
-  console.log("IpfsHttpClient(apiMultiAddr)", apiMultiAddr);
-  ipfsAPI = IpfsHttpClient(apiMultiAddr);
+  console.log("IpfsHttpClient(apiMultiAddr)", String(apiMultiAddr) );
+  ipfsAPI = IpfsHttpClient(String(apiMultiAddr));
   const { id } = await ipfsAPI.id();
   console.log(`ipfsAPI`, id);
 }
@@ -77,7 +73,7 @@ async function wsConnect(addr) {
     throw new Error("Wait for the local IPFS node to start first");
   }
 
-  await ipfsBrowser.swarm.connect(addr);
+  await ipfsBrowser.swarm.connect(String(addr));
   console.log(`did-ipid connected to ${addr}`);
 }
 
