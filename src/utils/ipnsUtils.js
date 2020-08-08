@@ -59,9 +59,13 @@ async function createIpfsBrowser(pem) {
 // Connect to a Go-IPFS-Node remotely through its API
 async function nodeConnect(apiMultiAddr) {
   console.log("IpfsHttpClient(apiMultiAddr)", String(apiMultiAddr) );
-  ipfsAPI = IpfsHttpClient(String(apiMultiAddr));
-  const { id } = await ipfsAPI.id();
-  console.log(`ipfsAPI`, id);
+  try {
+    ipfsAPI = IpfsHttpClient(String(apiMultiAddr));
+    const { id } = await ipfsAPI.id();
+    console.log(`ipfsAPI`, id);      
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 // Connect to the same Go-IPFS-Node remotely via websocket, so pubsub works
