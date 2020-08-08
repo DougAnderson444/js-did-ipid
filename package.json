@@ -35,12 +35,6 @@
     "prerelease": "npm t && npm run lint && npm run build",
     "release": "standard-version"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "standard-version": {
     "scripts": {
       "posttag": "git push --follow-tags origin master"

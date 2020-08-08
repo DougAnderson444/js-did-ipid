@@ -100,7 +100,7 @@ class Ipid {
           });
 
           // Push it to the goIpfs node network
-          console.log(`this.#apiMultiAddr, this.#wsMultiAddr, cid`,this.#apiMultiAddr, this.#wsMultiAddr, cid)
+          console.log('this.#apiMultiAddr, this.#wsMultiAddr, cid', this.#apiMultiAddr, this.#wsMultiAddr, cid);
           goPush(pem, this.#apiMultiAddr, this.#wsMultiAddr, cid)
           .then(() => {
               console.log(

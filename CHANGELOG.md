@@ -8,6 +8,15 @@ Bumped resolve() to ipfs.name.resolve() compatible with [async iterators style](
 
 git commit --no-verify -m 'message'
 
+removed from package
+
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+
 ### [0.4.1](https://github.com/ipfs-shipyard/js-did-ipid/compare/v0.4.0...v0.4.1) (2019-06-17)
 
 
