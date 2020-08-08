@@ -58,6 +58,7 @@ async function createIpfsBrowser(pem) {
 async function nodeConnect(apiMultiAddr) {
     ipfsAPI = IpfsHttpClient(apiMultiAddr);
     await ipfsAPI.id();
+    console.log(`ipfsAPI ${id.toString()}`)
 }
 
 // Connect to the same Go-IPFS-Node remotely via websocket, so pubsub works
@@ -70,7 +71,7 @@ async function wsConnect(addr) {
     }
 
     await ipfsBrowser.swarm.connect(addr);
-    const peers = await ipfsBrowser.swarm.peers();
+    console.log(`did-ipid connected to ${addr}`)
 }
 
 // Utility fn, Wait until a peer subscribes a topic
