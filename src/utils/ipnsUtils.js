@@ -5,7 +5,6 @@ const pRetry = require("p-retry");
 const base64url = require("base64url");
 const last = require("it-last");
 const Buffer = require("buffer/").Buffer; // Note: the trailing slash is important!
-const Ctl = require("ipfsd-ctl");
 
 const namespace = "/record/";
 const retryOptions = {
@@ -36,19 +35,6 @@ async function createIpfsBrowser(pem) {
     options.init = new Object();
     options.init.privateKey = b64pk;
     ipfsBrowser = await IPFS.create(options);
-    const { id } = await ipfsBrowser.id();
-
-    /*
-    ipfsBrowser = await Ctl.createController({
-      type: "js",
-      remote: false,
-      disposable: true,
-      ipfsModule: require("ipfs"),
-      ipfsOptions: options,
-    });
-    const id = await ipfsBrowser.api.id();
-    console.log(`ipfsBrowser is ${JSON.stringify(id, null, 2)}`);
-    */
   } else {
     await ipfsBrowser.start();
   }
@@ -58,11 +44,9 @@ async function createIpfsBrowser(pem) {
 
 // Connect to a Go-IPFS-Node remotely through its API
 async function nodeConnect(apiMultiAddr) {
-  console.log("IpfsHttpClient(apiMultiAddr)", String(apiMultiAddr) );
   try {
-    ipfsAPI = IpfsHttpClient(String(apiMultiAddr));
+    ipfsAPI = IpfsHttpClient(apiMultiAddr);
     const { id } = await ipfsAPI.id();
-    console.log(`ipfsAPI`, id);      
   } catch (error) {
     console.log(error)
   }
@@ -204,7 +188,6 @@ async function publish(cid) {
 
 const goPush = async (pem, apiMultiAddr, wsMultiAddr, cid) => {
   // Use pem to create local ipfs node with 'self' key = pem
-  console.log(`goPush`);
   ipfsBrowser = await createIpfsBrowser(pem);
 
   // 3 Steps process:

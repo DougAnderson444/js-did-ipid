@@ -78,7 +78,6 @@
     "buffer": "^5.2.1",
     "ipfs": "^0.48.1",
     "ipfs-http-client": "^45.0.0",
-    "ipfsd-ctl": "^5.0.0",
     "ipns": "^0.7.3",
     "it-last": "^1.0.2",
     "libp2p-crypto": "^0.16.1",
