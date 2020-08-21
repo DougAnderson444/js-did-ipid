@@ -87,6 +87,8 @@ class Ipid {
           .publish(path, {
               resolve: false,
               key: keyName,
+              lifetime: this.#lifetime,
+              ttl: this.#lifetime,
           })
           .then((resLocal) => {
               console.log(
